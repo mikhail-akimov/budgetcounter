@@ -14,3 +14,4 @@ def check_user(userid):
 def add_user(user_id, user_name):
     user = User.create(userid=user_id, username=user_name, force_insert=True)
     return user
+

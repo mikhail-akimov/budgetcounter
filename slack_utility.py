@@ -45,7 +45,7 @@ class IncomingMessage:
     def __init__(self, data):
         self.data = data
         self.type = None
-        self.user = None
+        self.user_id = None
         self.text = None
         self.client_msg_id = None
         self.team = None
@@ -54,14 +54,11 @@ class IncomingMessage:
         self.ts = None
 
     def parse_message(self):
-        if self.data:
-            if self.data[0]['type'] == 'message':
-                return Message(self.data)
-            elif self.data[0]['type'] == 'hello':
-                return HelloMessage(self.data)
-            return self
-        else:
-            return None
+        if self.data[0]['type'] == 'message':
+            return Message(self.data)
+        elif self.data[0]['type'] == 'hello':
+            return HelloMessage(self.data)
+        return self
 
 
 class HelloMessage(IncomingMessage):
@@ -76,7 +73,7 @@ class Message(IncomingMessage):
     def __init__(self, data):
         super().__init__(data)
         self.type = self.data[0]['type']
-        self.user = self.data[0]['user']
+        self.user_id = self.data[0]['user']
         self.text = self.data[0]['text']
         self.client_msg_id = self.data[0]['client_msg_id']
         self.team = self.data[0]['team']
@@ -85,7 +82,7 @@ class Message(IncomingMessage):
         self.ts = self.data[0]['ts']
 
     def __str__(self):
-        return '{} wrote {} in {}'.format(self.user, self.text, self.channel)
+        return '{} wrote {} in {}'.format(self.user_id, self.text, self.channel)
 
 
 class UserTyping(IncomingMessage):

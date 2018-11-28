@@ -10,10 +10,18 @@ def main_loop():
         print('BOT connected and ready to chat!')
         while True:
             data = IncomingMessage(slack_api.rtm_read())
-            sleep(1)
-            message = data.parse_message()
-            print(message)
-
+            if data.data:
+                message = data.parse_message()
+                print(message)
+                if message.user_id:
+                    if check_user(message.user_id):
+                        print('There is!')
+                    else:
+                        print('There is no such user. Let`s add him!')
+                else:
+                    print('Not from user...')
+            else:
+                sleep(1)
 
 
             # if slack_utility.parse_message(data):
