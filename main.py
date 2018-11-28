@@ -11,10 +11,8 @@ def main_loop():
         while True:
             data = IncomingMessage(slack_api.rtm_read())
             sleep(1)
-            if data.data:
-                print(data.data)
-                message = data.parse_message()
-                print(message)
+            message = data.parse_message()
+            print(message)
 
 
 

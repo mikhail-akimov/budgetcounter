@@ -54,11 +54,14 @@ class IncomingMessage:
         self.ts = None
 
     def parse_message(self):
-        if self.data[0]['type'] == 'message':
-            return Message(self.data)
-        elif self.data[0]['type'] == 'hello':
-            return HelloMessage(self.data)
-        return self
+        if self.data:
+            if self.data[0]['type'] == 'message':
+                return Message(self.data)
+            elif self.data[0]['type'] == 'hello':
+                return HelloMessage(self.data)
+            return self
+        else:
+            return None
 
 
 class HelloMessage(IncomingMessage):
