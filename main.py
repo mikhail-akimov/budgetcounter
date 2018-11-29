@@ -1,4 +1,4 @@
-from slack_utility import bot_init, IncomingMessage
+from slack_utility import bot_init, IncomingMessage, User
 from time import sleep
 from db_utility import check_user, add_user
 
@@ -14,12 +14,10 @@ def main_loop():
                 message = data.parse_message()
                 print(message)
                 if message.user_id:
-                    if check_user(message.user_id):
-                        print('There is!')
-                    else:
-                        print('There is no such user. Let`s add him!')
+                    user = User(slack_api, message.user_id)
+                    print(user.check_reg())
                 else:
-                    print('Not from user...')
+                    pass
             else:
                 sleep(1)
 

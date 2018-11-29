@@ -1,5 +1,6 @@
 from slackclient import SlackClient
 from bot_tokens import oauth_access, bot_access
+from db_utility import check_user, add_user
 
 
 def bot_init():
@@ -98,3 +99,45 @@ class DesktopNotification(IncomingMessage):
 class OutgoingMessage:
     def __init__(self):
         pass
+
+
+class User:
+    def __init__(self, slack_api, user_id):
+        self.slack_api = slack_api
+        self.user_id = user_id
+
+    def check_reg(self):
+        if check_user(self.user_id):
+            print('User found!')
+            return RegisteredUser(self.slack_api, check_user(self.user_id)[0], check_user(self.user_id)[1])
+        else:
+            user_profile = self.get_user_profile()
+            print('Registering user...')
+            return RegisteredUser(self.slack_api, user_profile['id'], user_profile['username'])
+
+    def get_user_profile(self):
+        user_profile = {}
+        profile = self.slack_api.api_call('users.info', user=self.user_id)['user']
+        user_profile['id'] = profile['id']
+        if profile['profile']['display_name'] != '':
+            user_profile['username'] = profile['profile']['display_name']
+        else:
+            user_profile['username'] = profile['real_name']
+        return user_profile
+
+    def register_user(self):
+        pass
+
+
+class RegisteredUser(User):
+    def __init__(self, slack_api, user_id, username):
+        super().__init__(slack_api, user_id)
+        self.username = username
+
+    def __str__(self):
+        return '{} {}'.format(self.user_id, self.username)
+
+
+class NewUser(User):
+    def __init__(self, user_id):
+        super().__init__(user_id)
