@@ -139,5 +139,5 @@ class RegisteredUser(User):
 
 
 class NewUser(User):
-    def __init__(self, user_id):
-        super().__init__(user_id)
+    def __init__(self, slack_api, user_id):
+        super().__init__(slack_api, user_id)
