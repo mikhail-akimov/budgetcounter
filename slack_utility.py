@@ -17,20 +17,6 @@ def send_test_msg(slack_api_client):
     return response
 
 
-def parse_message(msg):
-    if msg:
-        result = {}
-        for line in msg:
-            if line['type'] == 'message':
-                result['user_id'] = line['user']
-                result['message_text'] = line['text']
-                result['message_id'] = line['client_msg_id']
-                result['channel'] = line['channel']
-    else:
-        result = None
-    return result
-
-
 def get_user_profile(client, userid):
     user_profile = {}
     user = client.api_call('users.info', user=userid)['user']
@@ -113,7 +99,7 @@ class User:
         else:
             user_profile = self.get_user_profile()
             print('Registering user...')
-            return RegisteredUser(self.slack_api, user_profile['id'], user_profile['username'])
+            return add_user(user_profile['id'], user_profile['username'])
 
     def get_user_profile(self):
         user_profile = {}

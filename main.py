@@ -1,6 +1,4 @@
 from slack_utility import bot_init, IncomingMessage, User
-from time import sleep
-from db_utility import check_user, add_user
 
 
 def main_loop():
@@ -18,8 +16,6 @@ def main_loop():
                     print(user.check_reg())
                 else:
                     pass
-            else:
-                sleep(1)
 
 
 if __name__ == '__main__':

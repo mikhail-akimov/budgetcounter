@@ -4,9 +4,9 @@ db = sqlite_db.connect()
 
 
 def check_user(userid):
-    if User.select().where(User.userid == userid):
-        for user in User.select().where(User.userid == userid):
-            return user.userid, user.username
+    user = User.select().where(User.userid == userid).get()
+    if user:
+        return user.userid, user.username
     else:
         return False
 
