@@ -1,16 +1,22 @@
-from slackclient import SlackClient
-from project.bot_tokens import oauth_access, bot_access
+from slack_utility import bot_init, IncomingMessage, User
 
 
-def send_test_msg():
-    client = SlackClient(token='{}'.format(oauth_access))
-    return client.api_call(
-                    'chat.postMessage',
-                    channel="general",
-                    text="Writing some code!"
-                )
+def main_loop():
+    slack_api = bot_init()
+
+    if slack_api.rtm_connect():
+        print('BOT connected and ready to chat!')
+        while True:
+            data = IncomingMessage(slack_api.rtm_read())
+            if data.data:
+                message = data.parse_message()
+                print(message)
+                if message.user_id:
+                    user = User(slack_api, message.user_id)
+                    print(user.check_reg())
+                else:
+                    pass
 
 
 if __name__ == '__main__':
-    print(send_test_msg())
-
+    main_loop()
