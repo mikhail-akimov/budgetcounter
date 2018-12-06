@@ -8,7 +8,7 @@ def check_user(userid):
     if user:
         return user.userid, user.username
     else:
-        return False
+        return False, None
 
 
 def add_user(user_id, user_name):
